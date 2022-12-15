@@ -1,0 +1,42 @@
+---
+
+  - name: install enterprise service (nginx for CentOS)
+    tags: nginx, centos
+    yum:
+      name: nginx
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: install monitoring tool (nagios for CentOS)
+    tags: nagios, centos
+    dnf:
+      name: nagios
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: start nginx for centos
+    tags: nginx, centos
+    service:
+      name: nginx
+      state: restarted
+    when: ansible_distribution == "CentOS"
+
+  - name: start nagios for centos
+    tags: nagios, centos
+    service:
+      name: nagios
+      state: started
+    when: ansible_distribution == "Centos"
+
+  - name: "Creating the motd file"
+    file:
+      path: /etc/motd
+      state: touch
+    when: ansible_distribution == "CentOS"
+
+  - name: motd modification message
+    blockinfile:
+      path: /etc/motd
+      block:
+        Ansible managed by Eniceo
+    when: ansible_distribution == "CentOS"

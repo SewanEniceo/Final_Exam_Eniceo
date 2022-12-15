@@ -1,0 +1,37 @@
+---
+
+  - name: install enterprise service (nginx for ubuntu)
+    tags: nginx, ubuntu
+    apt:
+      name: nginx
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install monitoring tool (nagios  for ubuntu)
+    tags: nagios, ubuntu
+    apt:
+      name: nagios4
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: allow nginx firewall
+    shell: 'ufw allow "Nginx HTTP"'
+
+  - name: start nginx for ubuntu
+    service:
+      name: nginx
+      state: restarted
+    when: ansible_distribution == "Ubuntu"
+
+  - name: "Creating the motd file"
+    file:
+      path: /etc/motd
+      state: touch
+    when: ansible_distribution == "Ubuntu"
+
+  - name: "motd modification message"
+    blockinfile:
+      path: /etc/motd
+      block:
+        Ansible managed by Eniceo
+    when: ansible_distribution == "Ubuntu"
